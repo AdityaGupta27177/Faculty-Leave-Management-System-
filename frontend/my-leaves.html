@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="My Leave Applications — View and manage your leave requests.">
+    <title>My Applications — Leave Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                </div>
+                <div class="sidebar-brand">Leave Governance<small>Faculty Portal</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="apply-leave.html" class="nav-item">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </span>
+                        <span>Apply for Leave</span>
+                    </a>
+                    <a href="my-leaves.html" class="nav-item active">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </span>
+                        <span>My Applications</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-user">
+                <div class="user-avatar-placeholder">?</div>
+                <img class="user-avatar hidden" alt="Profile" src="">
+                <div class="user-info">
+                    <div class="user-name">Loading…</div>
+                    <div class="user-role">—</div>
+                </div>
+                <button class="btn-icon btn-ghost" onclick="logout()" title="Sign Out">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </aside>
+        <div class="sidebar-overlay"></div>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                    <h1 class="page-title">My Applications</h1>
+                </div>
+                <div class="header-right">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content" id="pageContent">
+                <!-- Bespoke Architectural Page Masthead -->
+                <section class="page-masthead fade-in">
+                    <div class="masthead-intro">
+                        <h1 class="masthead-title">My Leave Filings</h1>
+                        <p class="masthead-meta">
+                            Historical Record of Sanction Requests <span class="meta-separator">•</span> Real-Time Application Ledger
+                        </p>
+                    </div>
+                    <div class="masthead-actions">
+                        <a href="apply-leave.html" class="btn-primary-action">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            <span>New Application</span>
+                        </a>
+                        <div class="secondary-actions-group">
+                            <a href="dashboard.html" class="action-pill-btn" title="Back to Dashboard">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                                <span>Dashboard</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Architectural Journal Filter Ribbon -->
+                <div class="journal-filter-strip fade-in">
+                    <div class="search-input-wrapper" style="flex: 1; min-width: 240px;">
+                        <span class="search-icon">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </span>
+                        <input type="text" class="form-input" id="searchInput" placeholder="Search by application ID or reason…">
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <select class="form-select filter-select" id="statusFilter" style="width: auto; min-width: 140px;">
+                            <option value="">All Statuses</option>
+                            <option value="DRAFT">Draft</option>
+                            <option value="SUBMITTED">Submitted</option>
+                            <option value="PENDING">Pending</option>
+                            <option value="APPROVED">Approved</option>
+                            <option value="REJECTED">Rejected</option>
+                            <option value="CANCELLED">Cancelled</option>
+                            <option value="RETURNED">Returned</option>
+                        </select>
+                        <select class="form-select filter-select" id="typeFilter" style="width: auto; min-width: 150px;">
+                            <option value="">All Types</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Applications Table -->
+                <div class="card fade-in" style="overflow: hidden;">
+                    <div class="table-container" id="applicationsTable">
+                        <div class="empty-state">
+                            <div class="spinner"></div>
+                            <p class="text-muted text-sm mt-md">Loading applications…</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Application Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal" style="max-width:640px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="detailTitle">Application Details</h3>
+                <button class="modal-close" onclick="closeDetailModal()">✕</button>
+            </div>
+            <div class="modal-body" id="detailBody">
+                <div class="spinner" style="margin:24px auto;"></div>
+            </div>
+            <div class="modal-footer" id="detailFooter"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let allApplications = [];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await requireAuth(['FACULTY', 'HOD', 'ADMIN']);
+            if (!user) return;
+
+            await loadLeaveTypeFilter();
+            await loadApplications();
+
+            // Set up filter listeners
+            document.getElementById('searchInput').addEventListener('input',
+                Utils.debounce(() => filterApplications(), 300));
+            document.getElementById('statusFilter').addEventListener('change', filterApplications);
+            document.getElementById('typeFilter').addEventListener('change', filterApplications);
+
+            // Check URL for detail view
+            const params = new URLSearchParams(window.location.search);
+            const detailId = params.get('id');
+            if (detailId) showDetail(parseInt(detailId));
+        });
+
+        async function loadLeaveTypeFilter() {
+            try {
+                const types = await API.get('/api/leave-types');
+                const select = document.getElementById('typeFilter');
+                types.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.id;
+                    opt.textContent = t.name;
+                    select.appendChild(opt);
+                });
+            } catch (e) { /* ignore */ }
+        }
+
+        async function loadApplications() {
+            try {
+                allApplications = await API.get('/api/leave/my');
+                renderApplications(allApplications);
+            } catch (e) {
+                document.getElementById('applicationsTable').innerHTML =
+                    '<p class="text-muted" style="padding:24px;">Unable to load applications.</p>';
+            }
+        }
+
+        function filterApplications() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+            const type = document.getElementById('typeFilter').value;
+
+            let filtered = allApplications;
+
+            if (search) {
+                filtered = filtered.filter(a =>
+                    (a.application_no || '').toLowerCase().includes(search) ||
+                    (a.reason || '').toLowerCase().includes(search) ||
+                    (a.leave_type_name || '').toLowerCase().includes(search)
+                );
+            }
+            if (status) filtered = filtered.filter(a => a.status === status);
+            if (type) filtered = filtered.filter(a => a.leave_type_id == type);
+
+            renderApplications(filtered);
+        }
+
+        function renderApplications(apps) {
+            const container = document.getElementById('applicationsTable');
+
+            if (!apps || apps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--border-strong)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </div>
+                        <p class="empty-state-title">No applications found</p>
+                        <p class="empty-state-text">No leave applications match your filters.</p>
+                        <a href="apply-leave.html" class="btn btn-primary mt-md">Apply for Leave</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Type</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Days</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${apps.map(app => {
+                            const badge = Utils.statusBadge(app.status);
+                            return `
+                                <tr>
+                                    <td style="font-weight:500;">${Utils.escapeHtml(app.application_no)}</td>
+                                    <td>${Utils.escapeHtml(app.leave_type_name)}</td>
+                                    <td>${Utils.formatDate(app.start_date)}</td>
+                                    <td>${Utils.formatDate(app.end_date)}</td>
+                                    <td>${app.total_days}</td>
+                                    <td><span class="badge ${badge.className}">${badge.label}</span></td>
+                                    <td>
+                                        <div style="display:flex; gap:4px;">
+                                            <button class="btn btn-sm btn-ghost" onclick="showDetail(${app.id})" title="View Details">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            </button>
+                                            ${app.status === 'DRAFT' || app.status === 'RETURNED' ? `
+                                            <a href="apply-leave.html?edit=${app.id}" class="btn btn-sm btn-ghost" title="Edit Application">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                            </a>` : ''}
+                                            ${app.status === 'SUBMITTED' || app.status === 'PENDING' ? `
+                                            <button class="btn btn-sm btn-ghost" onclick="cancelApplication(${app.id})" title="Cancel Application" style="color:var(--danger-500);">
+                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                                            </button>` : ''}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function showDetail(id) {
+            const modal = document.getElementById('detailModal');
+            modal.classList.add('active');
+            const body = document.getElementById('detailBody');
+            const footer = document.getElementById('detailFooter');
+
+            try {
+                const app = await API.get(`/api/leave/${id}`);
+                const badge = Utils.statusBadge(app.status);
+
+                document.getElementById('detailTitle').textContent = `Application ${app.application_no}`;
+
+                body.innerHTML = `
+                    <div style="margin-bottom:16px;">
+                        <span class="badge ${badge.className}" style="font-size:0.85rem; padding:6px 14px;">${badge.label}</span>
+                    </div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Leave Type</div>
+                            <div class="detail-value">${Utils.escapeHtml(app.leave_type_name)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Duration</div>
+                            <div class="detail-value">${app.total_days} day${app.total_days !== 1 ? 's' : ''}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Start Date</div>
+                            <div class="detail-value">${Utils.formatDate(app.start_date, 'long')}${app.half_day_start ? ' (Half day)' : ''}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">End Date</div>
+                            <div class="detail-value">${Utils.formatDate(app.end_date, 'long')}${app.half_day_end ? ' (Half day)' : ''}</div>
+                        </div>
+                        <div class="detail-item" style="grid-column: 1 / -1;">
+                            <div class="detail-label">Reason</div>
+                            <div class="detail-value">${Utils.escapeHtml(app.reason)}</div>
+                        </div>
+                        ${app.approver_name ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Approver</div>
+                            <div class="detail-value">${Utils.escapeHtml(app.approver_name)}</div>
+                        </div>` : ''}
+                        <div class="detail-item">
+                            <div class="detail-label">Submitted</div>
+                            <div class="detail-value">${app.submitted_at ? Utils.formatDate(app.submitted_at, 'time') : 'Not submitted'}</div>
+                        </div>
+                        ${app.decided_at ? `
+                        <div class="detail-item">
+                            <div class="detail-label">Decision Date</div>
+                            <div class="detail-value">${Utils.formatDate(app.decided_at, 'time')}</div>
+                        </div>` : ''}
+                    </div>
+
+                    ${app.approval_history && app.approval_history.length > 0 ? `
+                    <div style="margin-top:24px;">
+                        <h4 style="margin-bottom:12px;">Approval History</h4>
+                        ${app.approval_history.map(h => `
+                            <div style="padding:10px; background:var(--bg-elevated); border-radius:var(--radius-md); margin-bottom:8px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <span class="badge ${Utils.statusBadge(h.action).className}">${h.action}</span>
+                                    <span class="text-xs text-muted">${Utils.formatDate(h.created_at, 'time')}</span>
+                                </div>
+                                <div class="text-sm mt-sm">${Utils.escapeHtml(h.actor_name || '—')}</div>
+                                ${h.comments ? `<div class="text-sm text-muted mt-sm" style="font-style:italic;">"${Utils.escapeHtml(h.comments)}"</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>` : ''}
+                `;
+
+                // Footer actions
+                let actions = '<button class="btn btn-secondary" onclick="closeDetailModal()">Close</button>';
+                if (app.status === 'DRAFT' || app.status === 'RETURNED') {
+                    actions = `<a href="apply-leave.html?edit=${app.id}" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        Edit Application
+                    </a> ` + actions;
+                }
+                if (app.status === 'SUBMITTED' || app.status === 'PENDING') {
+                    actions = `<button class="btn btn-danger" onclick="cancelApplication(${app.id})" style="display:inline-flex; align-items:center; gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                        Cancel Application
+                    </button> ` + actions;
+                }
+                footer.innerHTML = actions;
+
+            } catch (e) {
+                body.innerHTML = '<p class="text-muted">Unable to load application details.</p>';
+                footer.innerHTML = '<button class="btn btn-secondary" onclick="closeDetailModal()">Close</button>';
+            }
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+            // Clean URL
+            window.history.replaceState({}, '', 'my-leaves.html');
+        }
+
+        async function cancelApplication(id) {
+            const confirmed = await Utils.confirm(
+                'Cancel Application?',
+                'Are you sure you want to cancel this leave application? This action cannot be undone.',
+                'Cancel Application',
+                'danger'
+            );
+            if (!confirmed) return;
+
+            try {
+                await API.post(`/api/leave/${id}/cancel`);
+                showToast('success', 'Cancelled', 'Leave application has been cancelled.');
+                closeDetailModal();
+                await loadApplications();
+            } catch (e) {
+                showToast('error', 'Error', e.message || 'Unable to cancel application.');
+            }
+        }
+    </script>
+</body>
+</html>

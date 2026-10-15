@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Faculty Leave Management System — Institutional Portal for Academic Governance and Faculty Leave Administration.">
+    <title>Faculty Leave Management System — Institutional Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="spinner lg"></div>
+        <p class="loading-text" id="loadingText">Authenticating credential…</p>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Login Gateway Screen -->
+    <div class="login-page" id="loginPage">
+        <div class="login-gateway fade-in">
+            <!-- Left Panel: Institutional Brand & Governance -->
+            <div class="gateway-hero">
+                <div class="gateway-badge">
+                    <span class="dot"></span>
+                    <span>Office of Academic Governance • AY 2026–2027</span>
+                </div>
+
+                <h1 class="gateway-heading">
+                    Faculty Leave<br>
+                    <span>Management System</span>
+                </h1>
+
+                <p class="gateway-lead">
+                    Official administrative portal for faculty entitlement tracking, departmental sanctioning workflows, and statutory academic leave compliance.
+                </p>
+
+                <div class="gateway-pillars">
+                    <div class="pillar-item">
+                        <div class="pillar-title">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            <span>Policy Rules Engine</span>
+                        </div>
+                        <div class="pillar-desc">
+                            Automated entitlements for Casual, Sick, Earned, and Academic Duty leaves configured per designation.
+                        </div>
+                    </div>
+
+                    <div class="pillar-item">
+                        <div class="pillar-title">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                            <span>Multi-Tier Sanctioning</span>
+                        </div>
+                        <div class="pillar-desc">
+                            Real-time approval queues with conflict detection, overlap warnings, and departmental schedules.
+                        </div>
+                    </div>
+
+                    <div class="pillar-item">
+                        <div class="pillar-title">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Statutory Compliance</span>
+                        </div>
+                        <div class="pillar-desc">
+                            Official holiday sync, half-day calculations, and persistent immutable audit logs.
+                        </div>
+                    </div>
+
+                    <div class="pillar-item">
+                        <div class="pillar-title">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                            <span>Cloud Architecture</span>
+                        </div>
+                        <div class="pillar-desc">
+                            PostgreSQL / Supabase backend with session tokens and role-based access control.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 16px; margin-top: 6px;">
+                    <div style="font-size: 0.74rem; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                        <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #2F6344;"></span>
+                        System Operational • Semester III Industry Practice-I Project
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Authentication Console -->
+            <div class="login-container">
+                <div class="login-card">
+                    <div class="login-logo">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                        </svg>
+                    </div>
+
+                    <h2 class="login-title">Institutional Sign-In</h2>
+                    <p class="login-subtitle">Authenticate with your university credentials or select an evaluation role below.</p>
+
+                    <!-- Google Single Sign-On -->
+                    <div id="googleSignInContainer" style="margin-bottom: 16px;">
+                        <button class="google-btn" id="googleSignInBtn" onclick="handleGoogleSignIn()">
+                            <svg viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.27-4.74 3.27-8.1z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Continue with Google Workspace
+                        </button>
+                    </div>
+
+                    <!-- Viva / Evaluation Direct Access -->
+                    <div style="margin: 14px 0 10px 0; display: flex; align-items: center; text-align: center; color: var(--text-muted); font-size: 0.69rem; letter-spacing: 0.05em; font-weight: 600;">
+                        <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+                        <span style="padding: 0 10px; text-transform: uppercase;">Or Instant Evaluation Access</span>
+                        <span style="flex: 1; border-bottom: 1px solid var(--border-color);"></span>
+                    </div>
+
+                    <div style="display: flex; gap: 7px; flex-direction: column;">
+                        <!-- Administrator -->
+                        <div class="demo-role-card" onclick="handleDevSignIn('admin@institution.edu')">
+                            <div class="demo-role-avatar">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            </div>
+                            <div class="demo-role-info">
+                                <div class="demo-role-name">
+                                    <span>Prof. Albus Dumbledore</span>
+                                    <span class="role-badge role-admin">ADMIN</span>
+                                </div>
+                                <div class="demo-role-sub">Executive Governance • Policy Engine • Audit Log</div>
+                            </div>
+                        </div>
+
+                        <!-- HOD -->
+                        <div class="demo-role-card" onclick="handleDevSignIn('hod.cs@institution.edu')">
+                            <div class="demo-role-avatar">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                            </div>
+                            <div class="demo-role-info">
+                                <div class="demo-role-name">
+                                    <span>Dr. Alan Turing</span>
+                                    <span class="role-badge role-hod">HOD (CS)</span>
+                                </div>
+                                <div class="demo-role-sub">Department Approval Queue • Leave Sanction • Calendar</div>
+                            </div>
+                        </div>
+
+                        <!-- Faculty -->
+                        <div class="demo-role-card" onclick="handleDevSignIn('faculty.cs@institution.edu')">
+                            <div class="demo-role-avatar">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <div class="demo-role-info">
+                                <div class="demo-role-name">
+                                    <span>Dr. Ada Lovelace</span>
+                                    <span class="role-badge role-faculty">FACULTY</span>
+                                </div>
+                                <div class="demo-role-sub">Associate Professor • Leave Filing • Entitlements</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="login-info">
+                        <strong>Evaluation Note:</strong> Click any role card above to immediately authenticate with active seed balances, approval queues, and policy rules.
+                    </div>
+
+                    <p class="login-footer">
+                        Faculty Leave Management System &copy; 2026<br>
+                        <span>Semester III • Industry Practice-I Project • Java & PostgreSQL</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Pending Approval Screen -->
+    <div class="login-page hidden" id="pendingPage">
+        <div class="login-container fade-in">
+            <div class="login-card" style="text-align: center;">
+                <div class="login-logo" style="background: linear-gradient(135deg, #B45309 0%, #F59E0B 100%);">⏳</div>
+                <h2 class="login-title">Account Review Pending</h2>
+                <p class="login-subtitle">Your institutional account has been created and is awaiting administrator role assignment.</p>
+                <div class="login-info" style="text-align: center;">
+                    An institutional administrator has been notified to review your designation and assign your departmental approval hierarchy.
+                </div>
+                <button class="btn btn-secondary w-full" onclick="handleLogout()" style="margin-top: 24px;">
+                    ← Return to Sign-In
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unauthorized Screen -->
+    <div class="login-page hidden" id="unauthorizedPage">
+        <div class="login-container fade-in">
+            <div class="login-card" style="text-align: center;">
+                <div class="login-logo" style="background: linear-gradient(135deg, #991B1B 0%, #DC2626 100%);">🚫</div>
+                <h2 class="login-title">Access Restricted</h2>
+                <p class="login-subtitle" id="unauthorizedMessage">Your account is not authorized to access this institutional system.</p>
+                <button class="btn btn-secondary w-full" onclick="handleLogout()" style="margin-top: 24px;">
+                    ← Return to Sign-In
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            checkExistingSession();
+        });
+
+        async function checkExistingSession() {
+            try {
+                const user = await API.get('/api/auth/me');
+                if (user && user.id) {
+                    redirectToDashboard(user.role);
+                }
+            } catch (e) {
+                // Not logged in, stay on login gateway
+            }
+        }
+
+        function handleGoogleSignIn() {
+            const clientId = window.APP_CONFIG?.googleClientId;
+            if (!clientId) {
+                showToast('error', 'Configuration Notice', 'Google Client ID not configured. Use the instant evaluation roles below.');
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: clientId,
+                callback: handleCredentialResponse,
+                auto_select: false
+            });
+
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+                    google.accounts.id.prompt();
+                }
+            });
+        }
+
+        async function handleCredentialResponse(response) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+
+            try {
+                const result = await API.post('/api/auth/google', {
+                    credential: response.credential
+                });
+
+                if (result.status === 'pending_approval') {
+                    overlay.classList.add('hidden');
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('pendingPage').classList.remove('hidden');
+                } else if (result.status === 'inactive') {
+                    overlay.classList.add('hidden');
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('unauthorizedMessage').textContent =
+                        'Your account has been deactivated. Please contact the Academic Registrar.';
+                    document.getElementById('unauthorizedPage').classList.remove('hidden');
+                } else if (result.user) {
+                    redirectToDashboard(result.user.role);
+                }
+            } catch (error) {
+                overlay.classList.add('hidden');
+                showToast('error', 'Authentication Failed', error.message || 'Unable to authenticate. Please try again.');
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                await API.post('/api/auth/logout');
+            } catch (e) {
+                // Ignore logout errors
+            }
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('pendingPage').classList.add('hidden');
+            document.getElementById('unauthorizedPage').classList.add('hidden');
+        }
+
+        async function handleDevSignIn(email) {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+            try {
+                const result = await API.post('/api/auth/dev-login', { email });
+                if (result.user) {
+                    redirectToDashboard(result.user.role);
+                } else if (result.status === 'pending_approval') {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('pendingPage').classList.remove('hidden');
+                } else {
+                    showToast('error', 'Sign-in Notice', 'Could not sign in with selected account.');
+                }
+            } catch (e) {
+                showToast('error', 'Authentication Error', e.message);
+            } finally {
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function redirectToDashboard(role) {
+            switch (role) {
+                case 'ADMIN':
+                    window.location.href = 'admin-dashboard.html';
+                    break;
+                case 'HOD':
+                    window.location.href = 'hod-dashboard.html';
+                    break;
+                default:
+                    window.location.href = 'dashboard.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Apply for Leave — Submit a new leave application.">
+    <title>Apply for Leave — Leave Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                </div>
+                <div class="sidebar-brand">Leave Governance<small>Faculty Portal</small></div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main</div>
+                    <a href="dashboard.html" class="nav-item">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                        </span>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="apply-leave.html" class="nav-item active">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        </span>
+                        <span>Apply for Leave</span>
+                    </a>
+                    <a href="my-leaves.html" class="nav-item">
+                        <span class="nav-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        </span>
+                        <span>My Applications</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="sidebar-user">
+                <div class="user-avatar-placeholder" id="userAvatar">?</div>
+                <img class="user-avatar hidden" id="userAvatarImg" alt="Profile" src="">
+                <div class="user-info">
+                    <div class="user-name">Loading…</div>
+                    <div class="user-role">—</div>
+                </div>
+                <button class="btn-icon btn-ghost" onclick="logout()" title="Sign Out">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </aside>
+        <div class="sidebar-overlay"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+                    <h1 class="page-title">Apply for Leave</h1>
+                </div>
+                <div class="header-right">
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="page-content" id="pageContent">
+                <!-- Bespoke Architectural Page Masthead -->
+                <section class="page-masthead fade-in">
+                    <div class="masthead-intro">
+                        <h1 class="masthead-title">File Leave Application</h1>
+                        <p class="masthead-meta">
+                            Academic Sanctions & Quota Deduction <span class="meta-separator">•</span> Official Faculty Filing
+                        </p>
+                    </div>
+                    <div class="masthead-actions">
+                        <div class="secondary-actions-group">
+                            <a href="dashboard.html" class="action-pill-btn" title="Back to Dashboard">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="my-leaves.html" class="action-pill-btn" title="View past applications">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                <span>My Applications</span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="filing-layout fade-in">
+                    <!-- Form Main Card -->
+                    <div class="filing-form-card">
+                        <div class="card-header" style="padding: 0 0 18px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 20px;">
+                            <div>
+                                <h3 class="card-title">Leave Request Dossier</h3>
+                                <p class="card-subtitle">All mandatory items marked with an asterisk must be validated for department review.</p>
+                            </div>
+                        </div>
+
+                        <form id="leaveForm" onsubmit="return false;">
+                            <!-- Leave Type -->
+                            <div class="form-group">
+                                <label class="form-label" for="leaveType">Leave Type <span class="required">*</span></label>
+                                <select class="form-select" name="leave_type_id" id="leaveType" required>
+                                    <option value="">Select leave type…</option>
+                                </select>
+                                <div class="form-help" id="leaveTypeHelp"></div>
+                            </div>
+
+                            <!-- Date Range -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="startDate">Start Date <span class="required">*</span></label>
+                                    <input type="date" class="form-input" name="start_date" id="startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="endDate">End Date <span class="required">*</span></label>
+                                    <input type="date" class="form-input" name="end_date" id="endDate" required>
+                                </div>
+                            </div>
+
+                            <!-- Half Day Options -->
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" name="half_day_start" id="halfDayStart">
+                                        Half day on start date
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-checkbox">
+                                        <input type="checkbox" name="half_day_end" id="halfDayEnd">
+                                        Half day on end date
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Duration Display -->
+                            <div class="form-group">
+                                <div style="padding: 12px 16px; background: var(--bg-hover); border: 1px solid var(--border-color); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: space-between;">
+                                    <span class="text-sm text-secondary">Calculated Sanction Duration</span>
+                                    <span class="font-semibold tabular-num" id="durationDisplay" style="color: var(--accent-primary); font-size: 1.05rem;">— days</span>
+                                </div>
+                                <div class="form-help" id="balanceWarning" style="color: var(--warning-text); display: none;"></div>
+                            </div>
+
+                            <!-- Reason -->
+                            <div class="form-group">
+                                <label class="form-label" for="reason">Academic / Personal Reason <span class="required">*</span></label>
+                                <textarea class="form-textarea" name="reason" id="reason" placeholder="State official grounds and necessary arrangements for missed lectures/sessions…" required></textarea>
+                                <div class="form-help"><span id="charCount">0</span>/1000 characters</div>
+                            </div>
+
+                            <!-- Supporting Document -->
+                            <div class="form-group" id="documentGroup">
+                                <label class="form-label" for="document">Supporting Document (if required)</label>
+                                <input type="file" class="form-input" name="document" id="document" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" style="padding: 8px;">
+                                <div class="form-help">PDF, image, or document (max 5MB). <span id="docRequired" class="hidden" style="color:var(--warning-text); font-weight:600;">Required for this leave category.</span></div>
+                            </div>
+
+                            <!-- Actions -->
+                            <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color);">
+                                <button type="button" class="btn btn-secondary" id="saveDraftBtn" onclick="submitLeave('DRAFT')">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                    <span>Save Draft</span>
+                                </button>
+                                <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitLeave('SUBMITTED')">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:6px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                    <span>Submit Application</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Policy & Guidance Sidebar -->
+                    <aside class="filing-guidelines-sidebar">
+                        <div class="guideline-card">
+                            <div class="guideline-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                                <span>Filing Guidelines</span>
+                            </div>
+                            <ul class="guideline-list">
+                                <li><strong>Advance Notice:</strong> Applications should ideally be submitted prior to the date of intended leave.</li>
+                                <li><strong>Casual Leaves (CL):</strong> Quota of 12 days per academic session. May not be combined with vacation without Dean approval.</li>
+                                <li><strong>Academic Duty (ADL):</strong> Conferred for university exams, conference presentations, and official committee duties.</li>
+                                <li><strong>Medical Sanctions:</strong> Supporting physician certificate is mandatory for sick leaves exceeding 2 consecutive days.</li>
+                            </ul>
+                        </div>
+
+                        <div class="guideline-card">
+                            <div class="guideline-title">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                <span>Institutional Sanctioning Flow</span>
+                            </div>
+                            <p class="text-xs text-muted" style="line-height:1.6; margin:0;">
+                                Your leave filing is dispatched to your Department Head (HOD) queue in real-time. Once sanctioned, your entitlement balance will be updated automatically.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/validation.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/leave-form.js"></script>
+</body>
+</html>
